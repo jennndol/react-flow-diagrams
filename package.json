@@ -2,17 +2,21 @@
   "name": "react-flow-diagrams",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://rmfisher.github.io/react-flow-diagrams",
   "dependencies": {
+    "draft-js": "^0.10.4",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "redux": "^3.7.2",
     "react-redux": "^5.0.6",
-    "draft-js": "^0.10.4"
+    "redux": "^3.7.2"
   },
   "devDependencies": {
+    "gh-pages": "^1.1.0",
     "react-scripts": "^1.0.14"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
