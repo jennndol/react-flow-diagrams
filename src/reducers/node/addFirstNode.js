@@ -9,7 +9,7 @@ export const addFirstNode = state => {
   const y = 50;
   const node = createNode(x, y, width, height, false);
 
-  const blocksFromHTML = convertFromHTML('Click Me and Press <br /> Shift + Arrow Keys');
+  const blocksFromHTML = convertFromHTML('Click Me and Press<br/><b>Shift</b> + <b>Arrow</b> Keys');
   const contentState = ContentState.createFromBlockArray(
     blocksFromHTML.contentBlocks,
     blocksFromHTML.entityMap,
