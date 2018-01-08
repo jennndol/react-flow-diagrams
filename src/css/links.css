@@ -1,9 +1,10 @@
 .link-bar {
   position: absolute;
-  top: 14px;
+  top: 15px;
   right: 20px;
   box-sizing: border-box;
   display: flex;
+  font-family: -apple-system, BlinkMacSystemFont, Noto Sans, sans-serif;
 }
 
 a {
