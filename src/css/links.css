@@ -1,0 +1,21 @@
+.link-bar {
+  position: absolute;
+  top: 14px;
+  right: 20px;
+  box-sizing: border-box;
+  display: flex;
+}
+
+a {
+  margin-left: 15px;
+  color: #333;  
+  text-decoration: none;
+}
+
+a:first-child {
+  margin-left: 0;
+}
+
+a:hover {
+  text-decoration: underline;
+}
