@@ -19,8 +19,8 @@ Command                                    | Action
 <kbd>Escape</kbd>                          | Clear selection
 <kbd>Delete</kbd> / <kbd>Backspace</kbd>   | Delete selection
 <kbd>Tab</kbd>                             | Select next node / wire
-<kbd>Enter</kbd> / double-click            | Edit text of the selected node / wire
 <kbd>+</kbd>                               | Add a node
+<kbd>Enter</kbd> / double-click            | Edit text of the selected node / wire
 <kbd>Shift</kbd> + mouse-drag on node edge | Add a wire starting from the node
 <kbd>Shift</kbd> + mouse-drag on wire      | Add points to a wire
 
