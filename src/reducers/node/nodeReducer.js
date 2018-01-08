@@ -26,7 +26,7 @@ export const nodeReducer = (state, action) => {
       const wiresAfterNodeResize = findIntersections(syncWiresOnNodeResize(state.wires, resizedNodes, action.id));
       return { ...state, nodes: resizedNodes, wires: wiresAfterNodeResize, snapGuides: snapGuidesAfterResize };
     case 'ADD_NODE':
-      return { ...state, nodes: [...state.nodes, createNode(50, 50, 150, 100, true)] };
+      return { ...state, nodes: [...state.nodes, createNode(50, 50, 180, 120, true)] };
     case 'ADD_NODE_AND_CONNECT':
       return addNodeAndConnect(state, action.id, action.direction);
     case 'ADD_FIRST_NODE':
