@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import '../css/links.css';
 
-const LinksComponent = props => (
-  <div className='link-bar'>
-    <a href='https://github.com/rmfisher/react-flow-diagrams/#instructions'>Help</a>
-    <a href='https://github.com/rmfisher/react-flow-diagrams'>GitHub</a>
-  </div>
-);
+export default class LinksComponent extends PureComponent {
 
-export default LinksComponent;
+  componentDidMount() {
+    this.root.addEventListener('mousedown', this.stopPropagation);
+  }
+
+  componentWillUnmount() {
+    this.root.removeEventListener('mousedown', this.stopPropagation);
+  }
+
+  render() {
+    return (
+      <div className='link-bar' ref={e => this.root = e}>
+        <a href='https://github.com/rmfisher/react-flow-diagrams/#instructions'>Help</a>
+        <a href='https://github.com/rmfisher/react-flow-diagrams'>GitHub</a>
+      </div>
+    );
+  }
+
+  stopPropagation = e => e.stopPropagation();
+}

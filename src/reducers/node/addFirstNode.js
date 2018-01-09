@@ -2,9 +2,7 @@ import { createNode } from '../helpers/createInitialState';
 import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 
 export const addFirstNode = state => {
-  const graph = document.getElementById('graph');
-  const graphWidth = graph.clientWidth;
-  const graphHeight = graph.clientHeight;
+  const graphWidth = document.getElementById('graph').clientWidth;
   const width = 180;
   const height = 120;
   const x = Math.round((graphWidth - width) / 2);
