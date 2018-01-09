@@ -14,7 +14,7 @@ export default class LinksComponent extends PureComponent {
   render() {
     return (
       <div className='link-bar' ref={e => this.root = e}>
-        <a href='https://github.com/rmfisher/react-flow-diagrams/#instructions'>Help</a>
+        <a href='https://github.com/rmfisher/react-flow-diagrams/blob/master/README.md#instructions'>Help</a>
         <a href='https://github.com/rmfisher/react-flow-diagrams'>GitHub</a>
       </div>
     );
