@@ -1,20 +1,20 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent } from "react";
 
 export default class SnapGuideComponent extends PureComponent {
-
   render() {
     this.index = 0;
     return (
-      <svg className='snap-guides'>
+      <svg className="snap-guides">
         {this.props.guides.map(g => this.renderSnapGuide(g))}
-        {this.props.guides.length > 0 && this.props.wires.map(w => this.createPath(w))}
+        {this.props.guides.length > 0 &&
+          this.props.wires.map(w => this.createPath(w))}
       </svg>
     );
   }
 
   renderSnapGuide(g) {
     const path = `M ${g.x1} ${g.y1} L ${g.x2} ${g.y2}`;
-    return <path key={++this.index} className='snap-guide' d={path}></path>
+    return <path key={++this.index} className="snap-guide" d={path} />;
   }
 
   createPath(w) {
@@ -25,6 +25,8 @@ export default class SnapGuideComponent extends PureComponent {
       const h = a[1] === b[1];
       path += h ? ` H ${b[0]}` : ` V ${b[1]}`;
     }
-    return <path key={++this.index} className='snap-guide-wire-mask' d={path}></path>
+    return (
+      <path key={++this.index} className="snap-guide-wire-mask" d={path} />
+    );
   }
 }

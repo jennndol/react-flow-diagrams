@@ -4,12 +4,15 @@ export const selectInArea = (element, area) => {
   } else {
     return element;
   }
-}
+};
 
 function isContainedInArea(element, area) {
-  if (typeof element.width !== 'undefined' && typeof element.height !== 'undefined') {
+  if (
+    typeof element.width !== "undefined" &&
+    typeof element.height !== "undefined"
+  ) {
     return isNodeContainedInArea(element, area);
-  } else if (typeof element.points !== 'undefined') {
+  } else if (typeof element.points !== "undefined") {
     return isWireContainedInArea(element, area);
   } else {
     return false;

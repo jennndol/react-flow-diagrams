@@ -1,6 +1,12 @@
-import { isStartHorizontal, isEndHorizontal } from './getWireOrientation';
+import { isStartHorizontal, isEndHorizontal } from "./getWireOrientation";
 
-export const updateRectangularPath = (start, end, startSide, endSide, oldPoints) => {
+export const updateRectangularPath = (
+  start,
+  end,
+  startSide,
+  endSide,
+  oldPoints
+) => {
   const startH = isStartHorizontal(startSide, endSide);
   const endH = isEndHorizontal(startSide, endSide);
   const newPoints = [...oldPoints];
@@ -19,4 +25,4 @@ export const updateRectangularPath = (start, end, startSide, endSide, oldPoints)
     newPoints[l - 2] = [newPoints[l - 1][0], newPoints[l - 2][1]];
   }
   return newPoints;
-}
+};

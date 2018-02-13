@@ -1,5 +1,5 @@
-import { syncConnectorSelection } from './syncConnectorSelection';
-import { findIntersections } from '../helpers/findIntersections';
+import { syncConnectorSelection } from "./syncConnectorSelection";
+import { findIntersections } from "../helpers/findIntersections";
 
 export const selectNext = state => {
   const id = getIdToSelect(state);
@@ -11,7 +11,7 @@ export const selectNext = state => {
     syncConnectorSelection(nodes, state.wires, wires);
     return { ...state, nodes, wires: findIntersections(wires) };
   }
-}
+};
 
 function getIdToSelect(state) {
   const selectedIds = getIds(state.nodes, state.wires, true);
@@ -19,8 +19,12 @@ function getIdToSelect(state) {
 
   if (selectedIds.length > 0 && unselectedIds.length > 0) {
     const maxSelectedId = Math.max(...selectedIds);
-    const nextUnselectedId = Math.min(...unselectedIds.filter(id => id > maxSelectedId));
-    return isFinite(nextUnselectedId) ? nextUnselectedId : Math.min(...unselectedIds);
+    const nextUnselectedId = Math.min(
+      ...unselectedIds.filter(id => id > maxSelectedId)
+    );
+    return isFinite(nextUnselectedId)
+      ? nextUnselectedId
+      : Math.min(...unselectedIds);
   } else if (unselectedIds.length > 0) {
     return Math.min(...unselectedIds);
   } else if (selectedIds.length > 0) {
@@ -31,7 +35,9 @@ function getIdToSelect(state) {
 }
 
 function getIds(nodes, wires, selected) {
-  return filterBySelection(nodes, selected).concat(filterBySelection(wires, selected));
+  return filterBySelection(nodes, selected).concat(
+    filterBySelection(wires, selected)
+  );
 }
 
 function filterBySelection(elements, selected) {

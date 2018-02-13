@@ -6,7 +6,7 @@ export const isStartHorizontal = (startSide, endSide) => {
   } else {
     return true;
   }
-}
+};
 
 export const isEndHorizontal = (startSide, endSide) => {
   if (endSide) {
@@ -16,8 +16,8 @@ export const isEndHorizontal = (startSide, endSide) => {
   } else {
     return true;
   }
-}
+};
 
 function isHorizontal(side) {
-  return side === 'left' || side === 'right';
+  return side === "left" || side === "right";
 }

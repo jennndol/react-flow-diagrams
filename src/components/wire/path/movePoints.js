@@ -8,7 +8,7 @@ export const moveSegment = (points, i, h, position) => {
   newPoints[i] = c;
   newPoints[i + 1] = d;
   return newPoints;
-}
+};
 
 export const getPointToDrag = (points, i, p) => {
   const a = points[i];
@@ -27,7 +27,7 @@ export const getPointToDrag = (points, i, p) => {
       return { i: i + 2, h };
     }
   }
-}
+};
 
 export const movePointRectangular = (points, i, h, newX, newY) => {
   const newPoints = [...points];
@@ -35,4 +35,4 @@ export const movePointRectangular = (points, i, h, newX, newY) => {
   newPoints[i] = [newX, newY];
   newPoints[i + 1] = h ? [points[i + 1][0], newY] : [newX, points[i + 1][1]];
   return newPoints;
-}
+};

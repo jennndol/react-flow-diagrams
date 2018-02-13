@@ -15,7 +15,7 @@
 
 .selection-box {
   position: absolute;
-  z-index: 4;  
+  z-index: 4;
   border: 1px solid rgb(0, 191, 255);
   background-color: rgba(135, 206, 250, 0.2);
   box-sizing: border-box;
@@ -41,7 +41,7 @@
 .snap-guide-wire-mask {
   stroke: white;
   fill: none;
-  transform: translate(0.5px, 0.5px);  
+  transform: translate(0.5px, 0.5px);
 }
 
 /* ---------- Nodes ---------- */
@@ -160,7 +160,7 @@
   z-index: 2;
   width: 20px;
   height: 20px;
-  transition-duration: .25s;
+  transition-duration: 0.25s;
   transition-property: transform, opacity;
 }
 
@@ -366,7 +366,7 @@
 }
 
 .wire-text .public-DraftEditor-content {
-  min-width: 5px; 
+  min-width: 5px;
 }
 
 /* ---------- Pointer Events ---------- */

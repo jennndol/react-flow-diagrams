@@ -1,9 +1,9 @@
-import React from 'react';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
-import undoableReducer from '../reducers';
-import GraphContainer from '../containers/GraphContainer';
-import '../css/app.css';
+import React from "react";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import undoableReducer from "../reducers";
+import GraphContainer from "../containers/GraphContainer";
+import "../css/app.css";
 
 const store = createStore(undoableReducer);
 

@@ -1,4 +1,7 @@
-import { clearSelection, updateSelection } from '../../actions/selectionActions';
+import {
+  clearSelection,
+  updateSelection
+} from "../../actions/selectionActions";
 
 let selectedAtPress = false;
 
@@ -11,17 +14,17 @@ export const handleSelectionOnPress = (dispatch, element, shortcutDown) => {
     dispatch(updateSelection(element.id, true));
     selectedAtPress = true;
   }
-}
+};
 
 export const handleSelectionOnRelease = (dispatch, element, shortcutDown) => {
   if (shortcutDown && !selectedAtPress) {
     dispatch(updateSelection(element.id, false));
   }
   selectedAtPress = false;
-}
+};
 
 export const handleSelectionOnClick = (dispatch, element, shortcutDown) => {
   if (!shortcutDown && element.selected) {
     dispatch(clearSelection(element.id));
   }
-}
+};

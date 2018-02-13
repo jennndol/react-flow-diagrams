@@ -1,7 +1,14 @@
 const extension = 30;
 const buffer = 30;
 
-export const layoutRectangularPath = (start, end, startBox, endBox, startSide, endSide) => {
+export const layoutRectangularPath = (
+  start,
+  end,
+  startBox,
+  endBox,
+  startSide,
+  endSide
+) => {
   let points;
   if (startSide === null && endSide === null) {
     points = direct(start, end, startSide, endSide);
@@ -20,18 +27,36 @@ export const layoutRectangularPath = (start, end, startBox, endBox, startSide, e
   } else if (startSide === endSide) {
     points = sameSides(start, end, startBox, endBox, startSide, endSide);
   } else {
-    points = perpendicularSides(start, end, startBox, endBox, startSide, endSide);
+    points = perpendicularSides(
+      start,
+      end,
+      startBox,
+      endBox,
+      startSide,
+      endSide
+    );
   }
   return [start].concat(points).concat([end]);
-}
+};
 
 // --- Simple direct path. ---
 
 function direct(start, end, startSide, endSide) {
-  const h = startSide !== null ? isHorizontal(startSide) : endSide !== null ? isHorizontal(endSide) : true;
-  if (value(start, h) === value(end, h) || value(start, !h) === value(end, !h)) {
+  const h =
+    startSide !== null
+      ? isHorizontal(startSide)
+      : endSide !== null ? isHorizontal(endSide) : true;
+  if (
+    value(start, h) === value(end, h) ||
+    value(start, !h) === value(end, !h)
+  ) {
     return [];
-  } else if (startSide === null || endSide === null || startSide === endSide || areSidesOpposite(startSide, endSide)) {
+  } else if (
+    startSide === null ||
+    endSide === null ||
+    startSide === endSide ||
+    areSidesOpposite(startSide, endSide)
+  ) {
     return addTwoPoints(start, end, mid(start, end, h), h);
   } else {
     return addOnePoint(start, end, h);
@@ -47,13 +72,21 @@ function sameStartAndEnd(start, end, box, startSide, endSide) {
   } else if (startSide === endSide) {
     return addTwoPoints(start, end, extend(start, startSide), h);
   } else if (areSidesOpposite(startSide, endSide)) {
-    if (oppositeSidesShortPathIsOuter(start, end, box, box, startSide, endSide)) {
+    if (
+      oppositeSidesShortPathIsOuter(start, end, box, box, startSide, endSide)
+    ) {
       return oppositeSidesLoopOuter(start, end, box, box, startSide, endSide);
     } else {
       return oppositeSidesLoopInner(start, end, box, box, startSide, endSide);
     }
   } else {
-    return addThreePoints(start, end, extend(start, startSide), extend(end, endSide), h);
+    return addThreePoints(
+      start,
+      end,
+      extend(start, startSide),
+      extend(end, endSide),
+      h
+    );
   }
 }
 
@@ -62,7 +95,10 @@ function sameStartAndEnd(start, end, box, startSide, endSide) {
 function endSideFree(start, end, startBox, startSide) {
   const h = isHorizontal(startSide);
   const d = delta(start, end, h, isOuter(startSide));
-  if (d > 2 * extension || (d > 0 && endIntersectsStartBoxTransverse(end, startBox, startSide))) {
+  if (
+    d > 2 * extension ||
+    (d > 0 && endIntersectsStartBoxTransverse(end, startBox, startSide))
+  ) {
     return direct(start, end, startSide, startSide);
   } else if (d > 0) {
     return addTwoPoints(start, end, extend(start, startSide), h);
@@ -95,28 +131,79 @@ function endIntersectsStartBoxTransverse(end, startBox, startSide) {
 // --- Opposite-side paths e.g. right to left, bottom to top, etc. ---
 
 function oppositeSides(start, end, startBox, endBox, startSide, endSide) {
-  const deltaFromStart = delta(start, end, isHorizontal(startSide), isOuter(startSide));
+  const deltaFromStart = delta(
+    start,
+    end,
+    isHorizontal(startSide),
+    isOuter(startSide)
+  );
   if (deltaFromStart > buffer) {
     return direct(start, end, startSide, endSide);
-  } else if (oppositeSidesTransverseGapLargeEnough(startBox, endBox, startSide, endSide)) {
-    return oppositeSidesDoublingBack(start, end, startBox, endBox, startSide, endSide);
+  } else if (
+    oppositeSidesTransverseGapLargeEnough(startBox, endBox, startSide, endSide)
+  ) {
+    return oppositeSidesDoublingBack(
+      start,
+      end,
+      startBox,
+      endBox,
+      startSide,
+      endSide
+    );
   } else if (deltaFromStart > 0) {
     return direct(start, end, startSide, endSide);
-  } else if (oppositeSidesShortPathIsOuter(start, end, startBox, endBox, startSide, endSide)) {
-    return oppositeSidesLoopOuter(start, end, startBox, endBox, startSide, endSide);
+  } else if (
+    oppositeSidesShortPathIsOuter(
+      start,
+      end,
+      startBox,
+      endBox,
+      startSide,
+      endSide
+    )
+  ) {
+    return oppositeSidesLoopOuter(
+      start,
+      end,
+      startBox,
+      endBox,
+      startSide,
+      endSide
+    );
   } else {
-    return oppositeSidesLoopInner(start, end, startBox, endBox, startSide, endSide);
+    return oppositeSidesLoopInner(
+      start,
+      end,
+      startBox,
+      endBox,
+      startSide,
+      endSide
+    );
   }
 }
 
-function oppositeSidesTransverseGapLargeEnough(startBox, endBox, startSide, endSide) {
+function oppositeSidesTransverseGapLargeEnough(
+  startBox,
+  endBox,
+  startSide,
+  endSide
+) {
   const h = !isHorizontal(startSide);
-  const innerGap = boxEdge(endBox, h, false) - boxEdge(startBox, h, true) > buffer;
-  const outerGap = boxEdge(startBox, h, false) - boxEdge(endBox, h, true) > buffer;
+  const innerGap =
+    boxEdge(endBox, h, false) - boxEdge(startBox, h, true) > buffer;
+  const outerGap =
+    boxEdge(startBox, h, false) - boxEdge(endBox, h, true) > buffer;
   return innerGap || outerGap;
 }
 
-function oppositeSidesDoublingBack(start, end, startBox, endBox, startSide, endSide) {
+function oppositeSidesDoublingBack(
+  start,
+  end,
+  startBox,
+  endBox,
+  startSide,
+  endSide
+) {
   const h = isHorizontal(startSide);
   const x = extend(start, startSide);
   const y = boxMid(startBox, endBox, !h);
@@ -124,32 +211,63 @@ function oppositeSidesDoublingBack(start, end, startBox, endBox, startSide, endS
   return addFourPoints(start, end, x, y, z, h);
 }
 
-function oppositeSidesShortPathIsOuter(start, end, startBox, endBox, startSide, endSide) {
+function oppositeSidesShortPathIsOuter(
+  start,
+  end,
+  startBox,
+  endBox,
+  startSide,
+  endSide
+) {
   const h = !isHorizontal(startSide);
   const startTransverse = value(start, h);
   const endTransverse = value(end, h);
-  const outerDistance = 2 * extreme(startBox, endBox, h, true) - startTransverse - endTransverse;
-  const innerDistance = startTransverse + endTransverse - 2 * extreme(startBox, endBox, h, false);
+  const outerDistance =
+    2 * extreme(startBox, endBox, h, true) - startTransverse - endTransverse;
+  const innerDistance =
+    startTransverse + endTransverse - 2 * extreme(startBox, endBox, h, false);
   return outerDistance <= innerDistance;
 }
 
-function oppositeSidesLoopOuter(start, end, startBox, endBox, startSide, endSide) {
+function oppositeSidesLoopOuter(
+  start,
+  end,
+  startBox,
+  endBox,
+  startSide,
+  endSide
+) {
   const h = isHorizontal(startSide);
   const endNodeIsObstructing = boxEdge(endBox, !h, true) > value(start, !h);
   const startNodeIsObstructing = boxEdge(startBox, !h, true) > value(end, !h);
-  const x = endNodeIsObstructing ? extreme(startBox, endBox, h, isOuter(startSide)) : extend(start, startSide);
+  const x = endNodeIsObstructing
+    ? extreme(startBox, endBox, h, isOuter(startSide))
+    : extend(start, startSide);
   const y = extreme(startBox, endBox, !h, true);
-  const z = startNodeIsObstructing ? extreme(startBox, endBox, h, isOuter(endSide)) : extend(end, endSide);
+  const z = startNodeIsObstructing
+    ? extreme(startBox, endBox, h, isOuter(endSide))
+    : extend(end, endSide);
   return addFourPoints(start, end, x, y, z, h);
 }
 
-function oppositeSidesLoopInner(start, end, startBox, endBox, startSide, endSide) {
+function oppositeSidesLoopInner(
+  start,
+  end,
+  startBox,
+  endBox,
+  startSide,
+  endSide
+) {
   const h = isHorizontal(startSide);
   const endNodeIsObstructing = boxEdge(endBox, !h, false) < value(start, !h);
   const startNodeIsObstructing = boxEdge(startBox, !h, false) < value(end, !h);
-  const x = endNodeIsObstructing ? extreme(startBox, endBox, h, isOuter(startSide)) : extend(start, startSide);
+  const x = endNodeIsObstructing
+    ? extreme(startBox, endBox, h, isOuter(startSide))
+    : extend(start, startSide);
   const y = extreme(startBox, endBox, !h, false);
-  const z = startNodeIsObstructing ? extreme(startBox, endBox, h, isOuter(endSide)) : extend(end, endSide);
+  const z = startNodeIsObstructing
+    ? extreme(startBox, endBox, h, isOuter(endSide))
+    : extend(end, endSide);
   return addFourPoints(start, end, x, y, z, h);
 }
 
@@ -157,33 +275,80 @@ function oppositeSidesLoopInner(start, end, startBox, endBox, startSide, endSide
 
 function sameSides(start, end, startBox, endBox, startSide, endSide) {
   const h = isHorizontal(startSide);
-  const bendsBackFromStart = isOuter(startSide) === (value(start, h) > boxEdge(endBox, h, true));
-  if (sameSidesSimpleBendIsPossible(bendsBackFromStart, start, end, startBox, endBox, startSide)) {
-    return addTwoPoints(start, end, extreme(startBox, endBox, h, isOuter(startSide)), h);
+  const bendsBackFromStart =
+    isOuter(startSide) === value(start, h) > boxEdge(endBox, h, true);
+  if (
+    sameSidesSimpleBendIsPossible(
+      bendsBackFromStart,
+      start,
+      end,
+      startBox,
+      endBox,
+      startSide
+    )
+  ) {
+    return addTwoPoints(
+      start,
+      end,
+      extreme(startBox, endBox, h, isOuter(startSide)),
+      h
+    );
   } else if (bendsBackFromStart) {
-    return sameSidesLoopAroundBendingBackFromStart(start, end, startBox, endBox, startSide);
+    return sameSidesLoopAroundBendingBackFromStart(
+      start,
+      end,
+      startBox,
+      endBox,
+      startSide
+    );
   } else {
-    return sameSidesLoopAroundBendingBackFromEnd(start, end, startBox, endBox, startSide);
+    return sameSidesLoopAroundBendingBackFromEnd(
+      start,
+      end,
+      startBox,
+      endBox,
+      startSide
+    );
   }
 }
 
-function sameSidesSimpleBendIsPossible(bendsBackFromStart, start, end, startBox, endBox, startSide) {
+function sameSidesSimpleBendIsPossible(
+  bendsBackFromStart,
+  start,
+  end,
+  startBox,
+  endBox,
+  startSide
+) {
   const h = isHorizontal(startSide);
   if (bendsBackFromStart) {
-    if ((value(end, h) < value(start, h)) !== isOuter(startSide)) {
+    if (value(end, h) < value(start, h) !== isOuter(startSide)) {
       return true;
     } else {
-      return boxEdge(startBox, !h, false) > value(end, !h) || boxEdge(startBox, !h, true) < value(end, !h);
+      return (
+        boxEdge(startBox, !h, false) > value(end, !h) ||
+        boxEdge(startBox, !h, true) < value(end, !h)
+      );
     }
   } else {
-    return boxEdge(endBox, !h, false) > value(start, !h) || boxEdge(endBox, !h, true) < value(start, !h);
+    return (
+      boxEdge(endBox, !h, false) > value(start, !h) ||
+      boxEdge(endBox, !h, true) < value(start, !h)
+    );
   }
 }
 
-function sameSidesLoopAroundBendingBackFromStart(start, end, startBox, endBox, startSide) {
+function sameSidesLoopAroundBendingBackFromStart(
+  start,
+  end,
+  startBox,
+  endBox,
+  startSide
+) {
   const h = isHorizontal(startSide);
   const x = extend(start, startSide);
-  const startMaxPlusMin = boxEdge(startBox, !h, true) + boxEdge(startBox, !h, false);
+  const startMaxPlusMin =
+    boxEdge(startBox, !h, true) + boxEdge(startBox, !h, false);
   let y;
   if (startMaxPlusMin <= value(start, !h) + value(end, !h) + 1) {
     y = boxEdge(startBox, !h, true) + extension;
@@ -194,7 +359,13 @@ function sameSidesLoopAroundBendingBackFromStart(start, end, startBox, endBox, s
   return addFourPoints(start, end, x, y, z, h);
 }
 
-function sameSidesLoopAroundBendingBackFromEnd(start, end, startBox, endBox, startSide) {
+function sameSidesLoopAroundBendingBackFromEnd(
+  start,
+  end,
+  startBox,
+  endBox,
+  startSide
+) {
   const h = isHorizontal(startSide);
   const x = boxMid(startBox, endBox, h);
   const endMaxPlusMin = boxEdge(endBox, !h, true) + boxEdge(endBox, !h, false);
@@ -240,7 +411,10 @@ function perpendicularSides(start, end, startBox, endBox, startSide, endSide) {
 
 function perpendicularSidesDirectIsPossible(start, end, startSide, endSide) {
   const h = isHorizontal(startSide);
-  return delta(start, end, h, isOuter(startSide)) > 0 && delta(start, end, !h, isOuter(endSide)) < 0;
+  return (
+    delta(start, end, h, isOuter(startSide)) > 0 &&
+    delta(start, end, !h, isOuter(endSide)) < 0
+  );
 }
 
 function perpendicularSidesFitsBetweenBoxes(point, box, pointSide) {
@@ -251,8 +425,10 @@ function perpendicularSidesFitsBetweenBoxes(point, box, pointSide) {
   } else {
     pointAxisOk = boxEdge(box, h, true) < value(point, h);
   }
-  const pointTransverseAxisMaxOk = value(point, !h) < boxEdge(box, !h, true) + extension;
-  const pointTransverseAxisMinOk = value(point, !h) > boxEdge(box, !h, false) - extension;
+  const pointTransverseAxisMaxOk =
+    value(point, !h) < boxEdge(box, !h, true) + extension;
+  const pointTransverseAxisMinOk =
+    value(point, !h) > boxEdge(box, !h, false) - extension;
 
   if (pointAxisOk && pointTransverseAxisMaxOk && pointTransverseAxisMinOk) {
     return true;
@@ -267,18 +443,25 @@ function perpendicularSidesFitsBetweenBoxes(point, box, pointSide) {
 
 function perpendicularSidesIsEndNodeObstructing(start, end, endSide) {
   const h = isHorizontal(endSide);
-  return isOuter(endSide) ? value(end, h) > value(start, h) : value(end, h) < value(start, h);
+  return isOuter(endSide)
+    ? value(end, h) > value(start, h)
+    : value(end, h) < value(start, h);
 }
 
 function perpendicularSidesIsStartNodeObstructing(start, end, startSide) {
   const h = isHorizontal(startSide);
-  return isOuter(startSide) ? value(start, h) > value(end, h) : value(start, h) < value(end, h);
+  return isOuter(startSide)
+    ? value(start, h) > value(end, h)
+    : value(start, h) < value(end, h);
 }
 
 // --- Question methods. ---
 
 function isAnyEndObscured(start, end, startBox, endBox) {
-  return (startBox && isContained(end, startBox)) || (endBox && isContained(start, endBox));
+  return (
+    (startBox && isContained(end, startBox)) ||
+    (endBox && isContained(start, endBox))
+  );
 }
 
 function isContained(point, box) {
@@ -288,17 +471,21 @@ function isContained(point, box) {
 }
 
 function areSidesOpposite(startSide, endSide) {
-  const horizontal = (startSide === 'left' && endSide === 'right') || (startSide === 'right' && endSide === 'left');
-  const vertical = (startSide === 'top' && endSide === 'bottom') || (startSide === 'bottom' && endSide === 'top');
+  const horizontal =
+    (startSide === "left" && endSide === "right") ||
+    (startSide === "right" && endSide === "left");
+  const vertical =
+    (startSide === "top" && endSide === "bottom") ||
+    (startSide === "bottom" && endSide === "top");
   return horizontal || vertical;
 }
 
 function isOuter(side) {
-  return side === 'right' || side === 'bottom';
+  return side === "right" || side === "bottom";
 }
 
 function isHorizontal(side) {
-  return side === 'left' || side === 'right';
+  return side === "left" || side === "right";
 }
 
 // --- Value accessors based on side. ---
@@ -328,7 +515,9 @@ function delta(start, end, h, increasing) {
 }
 
 function extend(point, side) {
-  return value(point, isHorizontal(side)) + (isOuter(side) ? 1 : -1) * extension;
+  return (
+    value(point, isHorizontal(side)) + (isOuter(side) ? 1 : -1) * extension
+  );
 }
 
 function boxEdge(box, h, o) {
@@ -341,9 +530,15 @@ function boxEdge(box, h, o) {
 
 function extreme(startBox, endBox, h, o) {
   if (o) {
-    return Math.max(boxEdge(startBox, h, o) + extension, boxEdge(endBox, h, o) + extension);
+    return Math.max(
+      boxEdge(startBox, h, o) + extension,
+      boxEdge(endBox, h, o) + extension
+    );
   } else {
-    return Math.min(boxEdge(startBox, h, o) - extension, boxEdge(endBox, h, o) - extension);
+    return Math.min(
+      boxEdge(startBox, h, o) - extension,
+      boxEdge(endBox, h, o) - extension
+    );
   }
 }
 

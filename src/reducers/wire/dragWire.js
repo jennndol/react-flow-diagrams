@@ -1,14 +1,19 @@
-import { layoutRectangularPath } from '../helpers/layoutRectangularPath';
-import { updateRectangularPath } from '../helpers/updateRectangularPath';
-import { snapToBox } from './snapPointToBox';
-import { connectStart, connectEnd } from '../helpers/connectNodes';
+import { layoutRectangularPath } from "../helpers/layoutRectangularPath";
+import { updateRectangularPath } from "../helpers/updateRectangularPath";
+import { snapToBox } from "./snapPointToBox";
+import { connectStart, connectEnd } from "../helpers/connectNodes";
 
 export const dragWire = (wire, nodes, point, start, allowSelfConnect) => {
-  return start ? dragWireStart(wire, nodes, point, allowSelfConnect) : dragWireEnd(wire, nodes, point, allowSelfConnect);
-}
+  return start
+    ? dragWireStart(wire, nodes, point, allowSelfConnect)
+    : dragWireEnd(wire, nodes, point, allowSelfConnect);
+};
 
 function dragWireStart(wire, nodes, point, allowSelfConnect) {
-  const endNode = wire.endNodeId !== null ? nodes.filter(n => n.id === wire.endNodeId)[0] : null;
+  const endNode =
+    wire.endNodeId !== null
+      ? nodes.filter(n => n.id === wire.endNodeId)[0]
+      : null;
   const endPoint = wire.points[wire.points.length - 1];
 
   const snapped = getFirstSnapped(point, nodes, endNode, allowSelfConnect);
@@ -19,14 +24,34 @@ function dragWireStart(wire, nodes, point, allowSelfConnect) {
 
   let newPoints;
   if (wire.manualLayout && updateAllowed) {
-    newPoints = updateRectangularPath(startPoint, endPoint, startSide, wire.endSide, wire.points);
+    newPoints = updateRectangularPath(
+      startPoint,
+      endPoint,
+      startSide,
+      wire.endSide,
+      wire.points
+    );
   } else {
-    newPoints = layoutRectangularPath(startPoint, endPoint, startNode, endNode, startSide, wire.endSide);
+    newPoints = layoutRectangularPath(
+      startPoint,
+      endPoint,
+      startNode,
+      endNode,
+      startSide,
+      wire.endSide
+    );
   }
-  const newWire = { ...wire, points: newPoints, manualLayout: wire.manualLayout && updateAllowed };
+  const newWire = {
+    ...wire,
+    points: newPoints,
+    manualLayout: wire.manualLayout && updateAllowed
+  };
   const newNodes = [...nodes];
 
-  if (wire.startNodeId !== null && (!snapped || wire.startNodeId !== startNode.id)) {
+  if (
+    wire.startNodeId !== null &&
+    (!snapped || wire.startNodeId !== startNode.id)
+  ) {
     const oldStartNode = nodes.filter(n => n.id === wire.startNodeId)[0];
     const index = nodes.indexOf(oldStartNode);
     const nodeToDisconnect = Object.assign({}, oldStartNode);
@@ -47,7 +72,10 @@ function dragWireStart(wire, nodes, point, allowSelfConnect) {
 }
 
 function dragWireEnd(wire, nodes, point, allowSelfConnect) {
-  const startNode = wire.startNodeId !== null ? nodes.filter(n => n.id === wire.startNodeId)[0] : null;
+  const startNode =
+    wire.startNodeId !== null
+      ? nodes.filter(n => n.id === wire.startNodeId)[0]
+      : null;
   const startPoint = wire.points[0];
 
   const snapped = getFirstSnapped(point, nodes, startNode, allowSelfConnect);
@@ -58,11 +86,28 @@ function dragWireEnd(wire, nodes, point, allowSelfConnect) {
 
   let newPoints;
   if (wire.manualLayout && updateAllowed) {
-    newPoints = updateRectangularPath(startPoint, endPoint, wire.startSide, endSide, wire.points);
+    newPoints = updateRectangularPath(
+      startPoint,
+      endPoint,
+      wire.startSide,
+      endSide,
+      wire.points
+    );
   } else {
-    newPoints = layoutRectangularPath(startPoint, endPoint, startNode, endNode, wire.startSide, endSide);
+    newPoints = layoutRectangularPath(
+      startPoint,
+      endPoint,
+      startNode,
+      endNode,
+      wire.startSide,
+      endSide
+    );
   }
-  const newWire = { ...wire, points: newPoints, manualLayout: wire.manualLayout && updateAllowed };
+  const newWire = {
+    ...wire,
+    points: newPoints,
+    manualLayout: wire.manualLayout && updateAllowed
+  };
   const newNodes = [...nodes];
 
   if (wire.endNodeId !== null && (!snapped || wire.endNodeId !== endNode.id)) {
@@ -100,7 +145,7 @@ function getFirstSnapped(point, nodes, oppositeNode, allowSelfConnect) {
 
 function getPos(point, node, side) {
   let pos;
-  if (side === 'left' || side === 'right') {
+  if (side === "left" || side === "right") {
     pos = (point[1] - node.y) / node.height;
   } else {
     pos = (point[0] - node.x) / node.width;

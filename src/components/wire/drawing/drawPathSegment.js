@@ -2,7 +2,7 @@ let arcRadius = 5;
 let mergeThreshold = 16;
 
 export const drawHorizontalSegment = (a, b, intersections) => {
-  let path = '';
+  let path = "";
   if (intersections && intersections.length > 0) {
     const y = a[1];
     const s = b[0] > a[0] ? 1 : -1;
@@ -20,14 +20,18 @@ export const drawHorizontalSegment = (a, b, intersections) => {
         path += arcTo(intersection, y - arcRadius, s);
       }
     }
-    path += arcTo(intersections[intersections.length - 1] + s * arcRadius, y, s);
+    path += arcTo(
+      intersections[intersections.length - 1] + s * arcRadius,
+      y,
+      s
+    );
   }
   path += hLineTo(b[0]);
   return path;
-}
+};
 
 export const drawVerticalSegment = (a, b, intersections) => {
-  let path = '';
+  let path = "";
   if (intersections && intersections.length > 0) {
     const x = a[0];
     const s = b[1] > a[1] ? 1 : -1;
@@ -45,11 +49,15 @@ export const drawVerticalSegment = (a, b, intersections) => {
         path += arcTo(x + arcRadius, intersection, s);
       }
     }
-    path += arcTo(x, intersections[intersections.length - 1] + s * arcRadius, s);
+    path += arcTo(
+      x,
+      intersections[intersections.length - 1] + s * arcRadius,
+      s
+    );
   }
   path += vLineTo(b[1]);
   return path;
-}
+};
 
 function hLineTo(x) {
   return ` H ${x}`;

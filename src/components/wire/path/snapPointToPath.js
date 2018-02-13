@@ -4,8 +4,8 @@ export const snapPointToPath = (p, points) => {
   let minDistance = threshold;
   let snapPoint;
   for (let i = 0; i < points.length - 1; i++) {
-    const aInset = (i === 0) ? 15 : 10;
-    const bInset = (i === points.length - 2) ? 25 : 10;
+    const aInset = i === 0 ? 15 : 10;
+    const bInset = i === points.length - 2 ? 25 : 10;
     const result = pointToLine(p, points[i], points[i + 1], aInset, bInset);
     if (result.distance < minDistance) {
       minDistance = result.distance;
@@ -13,7 +13,7 @@ export const snapPointToPath = (p, points) => {
     }
   }
   return minDistance < threshold ? snapPoint : null;
-}
+};
 
 function pointToLine(p, a, b, aInset, bInset) {
   if (a[1] === b[1]) {

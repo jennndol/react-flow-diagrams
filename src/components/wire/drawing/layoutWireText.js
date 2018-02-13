@@ -1,6 +1,6 @@
 export const layoutWireText = points => {
   return getMidPointAt(points, textIndex(points));
-}
+};
 
 function textIndex(points) {
   const segments = points.length - 1;

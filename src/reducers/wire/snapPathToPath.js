@@ -1,27 +1,52 @@
-import { movePointRectangular } from '../../components/wire/path/movePoints';
+import { movePointRectangular } from "../../components/wire/path/movePoints";
 
 const snapThreshold = 6;
 
 export const snapPathToPath = (points, otherPoints, snapInput) => {
-  const allSegmentsInRange = getAllSegmentsInRange(points, otherPoints, snapInput);
-  const closestX = allSegmentsInRange.reduce((min, segment) => getCloserSegment(min, segment, false), null);
-  const closestY = allSegmentsInRange.reduce((min, segment) => getCloserSegment(min, segment, true), null);
+  const allSegmentsInRange = getAllSegmentsInRange(
+    points,
+    otherPoints,
+    snapInput
+  );
+  const closestX = allSegmentsInRange.reduce(
+    (min, segment) => getCloserSegment(min, segment, false),
+    null
+  );
+  const closestY = allSegmentsInRange.reduce(
+    (min, segment) => getCloserSegment(min, segment, true),
+    null
+  );
 
   if (closestX !== null || closestY !== null) {
     const draggedPoint = points[snapInput.i];
     const newX = closestX !== null ? closestX.transverse : draggedPoint[0];
     const newY = closestY !== null ? closestY.transverse : draggedPoint[1];
-    const snappedPoints = movePointRectangular(points, snapInput.i, snapInput.h, newX, newY);
-    const snapGuides = getSnapGuides(allSegmentsInRange, snappedPoints[snapInput.i], snapInput.axis);
-    return { points: snappedPoints, snapGuides }
+    const snappedPoints = movePointRectangular(
+      points,
+      snapInput.i,
+      snapInput.h,
+      newX,
+      newY
+    );
+    const snapGuides = getSnapGuides(
+      allSegmentsInRange,
+      snappedPoints[snapInput.i],
+      snapInput.axis
+    );
+    return { points: snappedPoints, snapGuides };
   } else {
     return { points, snapGuides: [] };
   }
-}
+};
 
 function getAllSegmentsInRange(points, otherPoints, snapInput) {
   const draggedPoint = points[snapInput.i];
-  const ownSegmentsInRange = getSegmentsInRange(points, draggedPoint, snapInput.axis, snapInput.i);
+  const ownSegmentsInRange = getSegmentsInRange(
+    points,
+    draggedPoint,
+    snapInput.axis,
+    snapInput.i
+  );
   const otherSegmentsInRange = otherPoints
     .map(points => getSegmentsInRange(points, draggedPoint, snapInput.axis))
     .reduce((a, b) => a.concat(b), []);
@@ -36,16 +61,17 @@ function getSegmentsInRange(points, draggedPoint, dragAxis, draggedIndex) {
     const b = points[i + 1];
     const h = a[1] === b[1] && a[0] !== b[0];
     const v = a[0] === b[0] && a[1] !== b[1];
-    const canSnapToH = (dragAxis === 'v' || dragAxis === 'both') && h;
-    const canSnapToV = (dragAxis === 'h' || dragAxis === 'both') && v;
+    const canSnapToH = (dragAxis === "v" || dragAxis === "both") && h;
+    const canSnapToV = (dragAxis === "h" || dragAxis === "both") && v;
 
-    if ((canSnapToH || canSnapToV)) {
+    if (canSnapToH || canSnapToV) {
       const start = h ? a[0] : a[1];
       const end = h ? b[0] : b[1];
       const transverse = h ? a[1] : a[0];
       const draggedPointTransverse = h ? draggedPoint[1] : draggedPoint[0];
       const delta = Math.abs(draggedPointTransverse - transverse);
-      const selfDragged = draggedIndex && (i === draggedIndex - 1 || i === draggedIndex);
+      const selfDragged =
+        draggedIndex && (i === draggedIndex - 1 || i === draggedIndex);
 
       if (delta < snapThreshold) {
         segments.push({ start, end, transverse, h, delta, selfDragged });
@@ -56,7 +82,11 @@ function getSegmentsInRange(points, draggedPoint, dragAxis, draggedIndex) {
 }
 
 function getCloserSegment(currentMin, segment, h) {
-  if (segment.h === h && !segment.selfDragged && (currentMin === null || segment.delta < currentMin.delta)) {
+  if (
+    segment.h === h &&
+    !segment.selfDragged &&
+    (currentMin === null || segment.delta < currentMin.delta)
+  ) {
     return segment;
   } else {
     return currentMin;
@@ -69,8 +99,11 @@ function getSnapGuides(allSegmentsInRange, snappedPoint, dragAxis) {
   let maxX = Number.NEGATIVE_INFINITY;
   let maxY = Number.NEGATIVE_INFINITY;
   for (let segment of allSegmentsInRange) {
-    if (dragAxis === 'h' || dragAxis === 'both') {
-      if (!segment.h && (segment.selfDragged || segment.transverse === snappedPoint[0])) {
+    if (dragAxis === "h" || dragAxis === "both") {
+      if (
+        !segment.h &&
+        (segment.selfDragged || segment.transverse === snappedPoint[0])
+      ) {
         const segmentMin = Math.min(segment.start, segment.end);
         const segmentMax = Math.max(segment.start, segment.end);
         if (segmentMax < minY) {
@@ -81,8 +114,11 @@ function getSnapGuides(allSegmentsInRange, snappedPoint, dragAxis) {
         }
       }
     }
-    if (dragAxis === 'v' || dragAxis === 'both') {
-      if (segment.h && (segment.selfDragged || segment.transverse === snappedPoint[1])) {
+    if (dragAxis === "v" || dragAxis === "both") {
+      if (
+        segment.h &&
+        (segment.selfDragged || segment.transverse === snappedPoint[1])
+      ) {
         const segmentMin = Math.min(segment.start, segment.end);
         const segmentMax = Math.max(segment.start, segment.end);
         if (segmentMax < minX) {

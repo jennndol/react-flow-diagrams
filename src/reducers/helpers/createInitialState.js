@@ -10,7 +10,7 @@ export const createNode = (x, y, width, height, selected) => ({
   endConnectors: [],
   selected,
   editorState: null,
-  textEditable: false,
+  textEditable: false
 });
 
 export const createWire = selected => ({
@@ -27,7 +27,7 @@ export const createWire = selected => ({
   manualLayout: false,
   extensionInProgress: false,
   editorState: null,
-  textEditable: false,
+  textEditable: false
 });
 
 export const createInitialState = () => {
@@ -38,6 +38,6 @@ export const createInitialState = () => {
     wireCreationOn: false,
     dragStatus: null,
     snapAllowed: true,
-    currentlyEdited: -1,
+    currentlyEdited: -1
   };
-}
+};

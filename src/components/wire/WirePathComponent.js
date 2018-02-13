@@ -1,34 +1,43 @@
-import React, { PureComponent } from 'react';
-import WireExtenderComponent from './WireExtenderComponent';
-import { drawLine } from './drawing/drawRectangularPath';
-import { insetPoints } from './drawing/insetPoints';
+import React, { PureComponent } from "react";
+import WireExtenderComponent from "./WireExtenderComponent";
+import { drawLine } from "./drawing/drawRectangularPath";
+import { insetPoints } from "./drawing/insetPoints";
 
 export default class WirePathComponent extends PureComponent {
-
   componentDidMount() {
-    this.graph = document.getElementById('graph');
-    this.grabber.addEventListener('mousedown', this.onMouseDown);
-    this.grabber.addEventListener('click', this.onClick);
-    this.grabber.addEventListener('dblclick', this.onDoubleClick);
-    window.addEventListener('mouseup', this.onMouseUp);
-    window.addEventListener('blur', this.onBlur);
+    this.graph = document.getElementById("graph");
+    this.grabber.addEventListener("mousedown", this.onMouseDown);
+    this.grabber.addEventListener("click", this.onClick);
+    this.grabber.addEventListener("dblclick", this.onDoubleClick);
+    window.addEventListener("mouseup", this.onMouseUp);
+    window.addEventListener("blur", this.onBlur);
   }
 
   componentWillUnmount() {
-    this.grabber.removeEventListener('mousedown', this.onMouseDown);
-    this.grabber.removeEventListener('click', this.onClick);
-    this.grabber.removeEventListener('dblclick', this.onDoubleClick);
-    window.removeEventListener('mouseup', this.onMouseUp);
-    window.removeEventListener('blur', this.onBlur);
+    this.grabber.removeEventListener("mousedown", this.onMouseDown);
+    this.grabber.removeEventListener("click", this.onClick);
+    this.grabber.removeEventListener("dblclick", this.onDoubleClick);
+    window.removeEventListener("mouseup", this.onMouseUp);
+    window.removeEventListener("blur", this.onBlur);
   }
 
   render() {
-    const inset = insetPoints(this.props.wire.points, this.props.wire.intersections);
-    const line = inset.points.length > 1 ? drawLine(inset.points, inset.intersections) : '';
+    const inset = insetPoints(
+      this.props.wire.points,
+      this.props.wire.intersections
+    );
+    const line =
+      inset.points.length > 1
+        ? drawLine(inset.points, inset.intersections)
+        : "";
     return (
-      <g className='wire'>
-        <path className='wire-path-grabber' d={line} ref={e => this.grabber = e}></path>
-        <path className='wire-path' d={line}></path>
+      <g className="wire">
+        <path
+          className="wire-path-grabber"
+          d={line}
+          ref={e => (this.grabber = e)}
+        />
+        <path className="wire-path" d={line} />
         <WireExtenderComponent
           wire={this.props.wire}
           wireCreationOn={this.props.wireCreationOn}
@@ -37,7 +46,8 @@ export default class WirePathComponent extends PureComponent {
           aboutToEndWirePerturb={this.props.aboutToEndWirePerturb}
           endWirePerturb={this.props.endWirePerturb}
           setExtensionInProgress={this.props.setExtensionInProgress}
-          anyTextEdited={this.props.anyTextEdited} />
+          anyTextEdited={this.props.anyTextEdited}
+        />
       </g>
     );
   }
@@ -49,7 +59,7 @@ export default class WirePathComponent extends PureComponent {
       this.props.onPress(event.ctrlKey || event.metaKey);
       event.stopPropagation();
     }
-  }
+  };
 
   onMouseUp = event => this.onRelease(event.ctrlKey || event.metaKey);
 
@@ -60,17 +70,22 @@ export default class WirePathComponent extends PureComponent {
       this.props.onRelease(shortcutDown);
       this.pressed = false;
     }
-  }
+  };
 
   onClick = event => {
     if (event.button === 0 && !this.props.wire.textEditable) {
       this.props.onClick(event.ctrlKey || event.metaKey);
     }
-  }
+  };
 
   onDoubleClick = event => {
-    if (event.button === 0 && !this.props.wire.textEditable && !event.ctrlKey && !event.metaKey) {
+    if (
+      event.button === 0 &&
+      !this.props.wire.textEditable &&
+      !event.ctrlKey &&
+      !event.metaKey
+    ) {
       this.props.startTextEditing();
     }
-  }
+  };
 }

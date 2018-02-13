@@ -1,14 +1,14 @@
-import { layoutRectangularPath } from '../helpers/layoutRectangularPath';
-import { updateRectangularPath } from '../helpers/updateRectangularPath';
-import { getAbsolutePointOnNode } from '../helpers/getPointOnNode';
+import { layoutRectangularPath } from "../helpers/layoutRectangularPath";
+import { updateRectangularPath } from "../helpers/updateRectangularPath";
+import { getAbsolutePointOnNode } from "../helpers/getPointOnNode";
 
 export const syncWiresOnNodeDrag = (wires, nodes) => {
   return wires.map(w => syncWireOnNodeDrag(w, nodes));
-}
+};
 
 export const syncWiresOnNodeResize = (wires, nodes, resizedNodeId) => {
   return wires.map(w => syncWireOnNodeResize(w, nodes, resizedNodeId));
-}
+};
 
 function syncWireOnNodeDrag(wire, nodes) {
   const startNode = nodes.filter(n => n.id === wire.startNodeId)[0];
@@ -35,7 +35,11 @@ function updatePoints(startNode, endNode, wire) {
   const oldEndPoint = wire.points[wire.points.length - 1];
   let startPoint, endPoint;
   if (isDragged(startNode)) {
-    startPoint = getAbsolutePointOnNode(startNode, wire.startPos, wire.startSide);
+    startPoint = getAbsolutePointOnNode(
+      startNode,
+      wire.startPos,
+      wire.startSide
+    );
   }
   if (isDragged(endNode)) {
     endPoint = getAbsolutePointOnNode(endNode, wire.endPos, wire.endSide);
@@ -61,9 +65,22 @@ function updatePoints(startNode, endNode, wire) {
     if (canTranslate(startPoint, endPoint, wire.points)) {
       return translatePoints(startPoint, wire.points);
     } else if (wire.manualLayout) {
-      return updateRectangularPath(startPoint, endPoint, wire.startSide, wire.endSide, wire.points);
+      return updateRectangularPath(
+        startPoint,
+        endPoint,
+        wire.startSide,
+        wire.endSide,
+        wire.points
+      );
     } else {
-      return layoutRectangularPath(startPoint, endPoint, startNode, endNode, wire.startSide, wire.endSide);
+      return layoutRectangularPath(
+        startPoint,
+        endPoint,
+        startNode,
+        endNode,
+        wire.startSide,
+        wire.endSide
+      );
     }
   } else {
     return wire.points;
@@ -77,7 +94,12 @@ function isDragged(node) {
 function isLayoutNeeded(start, end, points) {
   const oldStart = points[0];
   const oldEnd = points[points.length - 1];
-  return oldStart[0] !== start[0] || oldStart[1] !== start[1] || oldEnd[0] !== end[0] || oldEnd[1] !== end[1];
+  return (
+    oldStart[0] !== start[0] ||
+    oldStart[1] !== start[1] ||
+    oldEnd[0] !== end[0] ||
+    oldEnd[1] !== end[1]
+  );
 }
 
 function canTranslate(start, end, points) {

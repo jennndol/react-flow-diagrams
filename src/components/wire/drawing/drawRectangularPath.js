@@ -1,4 +1,4 @@
-import { drawHorizontalSegment, drawVerticalSegment } from './drawPathSegment';
+import { drawHorizontalSegment, drawVerticalSegment } from "./drawPathSegment";
 
 export const drawLine = (points, intersections) => {
   let path = `M ${points[0][0]} ${points[0][1]}`;
@@ -12,12 +12,12 @@ export const drawLine = (points, intersections) => {
     }
   }
   return path;
-}
+};
 
 export const drawHead = (points, filled, headLength, headWidth) => {
   const a = points[points.length - 2];
   const b = points[points.length - 1];
-  const length = a[1] === b[1] ? (b[0] - a[0]) : (b[1] - a[1]);
+  const length = a[1] === b[1] ? b[0] - a[0] : b[1] - a[1];
   if (Math.abs(length) >= headLength) {
     let x1, y1, x2, y2;
     if (a[1] === b[1]) {
@@ -45,8 +45,10 @@ export const drawHead = (points, filled, headLength, headWidth) => {
         y2 = y1;
       }
     }
-    return `M ${x1} ${y1} L ${b[0]} ${b[1]} L ${x2} ${y2}` + (filled ? ' Z' : '');
+    return (
+      `M ${x1} ${y1} L ${b[0]} ${b[1]} L ${x2} ${y2}` + (filled ? " Z" : "")
+    );
   } else {
-    return '';
+    return "";
   }
-}
+};

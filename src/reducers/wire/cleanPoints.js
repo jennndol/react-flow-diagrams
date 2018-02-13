@@ -10,12 +10,12 @@ export const cleanPoints = wire => {
     newWire.manualLayout = false;
   }
   return newWire.points.length !== wire.points.length ? newWire : wire;
-}
+};
 
 function removeFirstEqualVertexPair(points) {
   for (let i = 1; i < points.length - 2; i++) {
     const a = points[i];
-    const b = points[i + 1]
+    const b = points[i + 1];
     if (a[0] === b[0] && a[1] === b[1]) {
       points.splice(i, 1);
       points.splice(i, 1);

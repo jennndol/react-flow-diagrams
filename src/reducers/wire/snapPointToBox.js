@@ -31,25 +31,40 @@ export const snapToBox = (x, y, box) => {
 
   // Snap away from corners.
   if (snapped && newX === box.x && newY === box.y) {
-    if (Math.hypot(left, top - cornerInset) <= Math.hypot(left - cornerInset, top)) {
+    if (
+      Math.hypot(left, top - cornerInset) <= Math.hypot(left - cornerInset, top)
+    ) {
       newY = box.y + cornerInset;
     } else {
       newX = box.x + cornerInset;
     }
   } else if (snapped && newX === box.x && newY === box.y + box.height) {
-    if (Math.hypot(left, bottom + cornerInset) <= Math.hypot(left - cornerInset, bottom)) {
+    if (
+      Math.hypot(left, bottom + cornerInset) <=
+      Math.hypot(left - cornerInset, bottom)
+    ) {
       newY = box.y + box.height - cornerInset;
     } else {
       newX = box.x + cornerInset;
     }
   } else if (snapped && newX === box.x + box.width && newY === box.y) {
-    if (Math.hypot(right, top - cornerInset) <= Math.hypot(right + cornerInset, top)) {
+    if (
+      Math.hypot(right, top - cornerInset) <=
+      Math.hypot(right + cornerInset, top)
+    ) {
       newY = box.y + cornerInset;
     } else {
       newX = box.x + box.width - cornerInset;
     }
-  } else if (snapped && newX === box.x + box.width && newY === box.y + box.height) {
-    if (Math.hypot(right, bottom + cornerInset) <= Math.hypot(right + cornerInset, bottom)) {
+  } else if (
+    snapped &&
+    newX === box.x + box.width &&
+    newY === box.y + box.height
+  ) {
+    if (
+      Math.hypot(right, bottom + cornerInset) <=
+      Math.hypot(right + cornerInset, bottom)
+    ) {
       newY = box.y + box.height - cornerInset;
     } else {
       newX = box.x + box.width - cornerInset;
@@ -60,7 +75,7 @@ export const snapToBox = (x, y, box) => {
   let snappedToTarget = false;
   if (snapped && (newX === box.x || newX === box.x + box.width)) {
     for (let target of snapTargets) {
-      let targetAbsolute = target * (box.height) + box.y;
+      let targetAbsolute = target * box.height + box.y;
       if (Math.abs(y - targetAbsolute) <= targetSnapThreshold) {
         newY = Math.floor(targetAbsolute);
         snappedToTarget = true;
@@ -69,7 +84,7 @@ export const snapToBox = (x, y, box) => {
   }
   if (snapped && (newY === box.y || newY === box.y + box.height)) {
     for (let target of snapTargets) {
-      let targetAbsolute = target * (box.width) + box.x;
+      let targetAbsolute = target * box.width + box.x;
       if (Math.abs(x - targetAbsolute) <= targetSnapThreshold) {
         newX = Math.floor(targetAbsolute);
         snappedToTarget = true;
@@ -79,15 +94,15 @@ export const snapToBox = (x, y, box) => {
 
   let snappedSide;
   if (snapped && newX === box.x) {
-    snappedSide = 'left';
+    snappedSide = "left";
   } else if (snapped && newX === box.x + box.width) {
-    snappedSide = 'right';
+    snappedSide = "right";
   } else if (snapped && newY === box.y) {
-    snappedSide = 'top';
+    snappedSide = "top";
   } else if (snapped && newY === box.y + box.height) {
-    snappedSide = 'bottom';
+    snappedSide = "bottom";
   } else {
     snappedSide = null;
   }
-  return ({ x: newX, y: newY, snappedSide, snappedToTarget });
-}
+  return { x: newX, y: newY, snappedSide, snappedToTarget };
+};
