@@ -8,6 +8,8 @@ Check out the demo [here](https://rmfisher.github.io/react-flow-diagrams).
 
 ## Instructions
 
+Currently a mouse and keyboard are required.
+
 | Command                                    | Action                                      |
 | ------------------------------------------ | ------------------------------------------- |
 | <kbd>Shift</kbd> + <kbd>Arrow</kbd>        | Add a node and connect to the selected node |
