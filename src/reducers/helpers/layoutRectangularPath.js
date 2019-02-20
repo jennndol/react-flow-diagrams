@@ -275,8 +275,7 @@ function oppositeSidesLoopInner(
 
 function sameSides(start, end, startBox, endBox, startSide, endSide) {
   const h = isHorizontal(startSide);
-  const bendsBackFromStart =
-    isOuter(startSide) === value(start, h) > boxEdge(endBox, h, true);
+  const bendsBackFromStart = (isOuter(startSide) === value(start, h)) > boxEdge(endBox, h, true);
   if (
     sameSidesSimpleBendIsPossible(
       bendsBackFromStart,
@@ -322,7 +321,7 @@ function sameSidesSimpleBendIsPossible(
 ) {
   const h = isHorizontal(startSide);
   if (bendsBackFromStart) {
-    if (value(end, h) < value(start, h) !== isOuter(startSide)) {
+    if (value(end, h) < (value(start, h) !== isOuter(startSide))) {
       return true;
     } else {
       return (
